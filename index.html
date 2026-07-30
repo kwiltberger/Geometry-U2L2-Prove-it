@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Triangle Congruence Detective Academy</title>
+
+  <style>
+    :root {
+      --navy: #0f2d44;
+      --blue: #f0f7fb;
+      --blue-border: #2f80a8;
+      --green: #eefaf1;
+      --green-border: #3ca65c;
+      --yellow: #fff8e6;
+      --yellow-border: #f2b705;
+      --gray: #f6f9fb;
+      --gray-border: #d6e6ef;
+      --purple: #f3e5f5;
+      --purple-border: #9c64a6;
+      --danger: #b42318;
+      --danger-bg: #fff1f0;
+      --text: #1f2933;
+      --focus: #f2b705;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: #eef3f7;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .wrap {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .hero {
+      padding: 24px;
+      border-radius: 14px;
+      background: var(--navy);
+      color: #ffffff;
+      box-shadow: 0 8px 22px rgba(15, 45, 68, 0.18);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      font-size: 18px;
+    }
+
+    .card {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--gray-border);
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 5px 18px rgba(15, 45, 68, 0.08);
+    }
+
+    .info {
+      border-left: 6px solid var(--blue-border);
+      background: var(--blue);
+    }
+
+    .green {
+      border-left: 6px solid var(--green-border);
+      background: var(--green);
+    }
+
+    .yellow {
+      border-left: 6px solid var(--yellow-border);
+      background: var(--yellow);
+    }
+
+    .purple {
+      border-left: 6px solid var(--purple-border);
+      background: var(--purple);
+    }
+
+    h2 {
+      margin-top: 0;
+      padding-bottom: 7px;
+      border-bottom: 2px solid var(--gray-border);
+      color: var(--navy);
+    }
+
+    h3 {
+      color: var(--navy);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--navy);
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .button.secondary {
+      background: #2f80a8;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .button:hover:not(:disabled) {
+      filter: brightness(1.08);
+    }
+
+    .button:focus,
+    input:focus {
+      outline: 4px solid rgba(242, 183, 5, 0.42);
+      outline-offset: 2px;
+    }
+
+    .nameInput {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #b8c7d1;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .small {
+      font-size: 14px;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .progressOuter {
+      flex: 1;
+      min-width: 220px;
+      height: 18px;
+      overflow: hidden;
+      border: 1px solid var(--gray-border);
+      border-radius: 999px;
+      background: #ffffff;
+    }
+
+    .progressInner {
+      width: 0;
+      height: 100%;
+      background: var(--green-border);
+      transition: width 0.25s ease;
+    }
+
+    .stats {
+      font-weight: bold;
+      color: var(--navy);
+    }
+
+    .caseTrail {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(95px, 1fr));
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .trailStep {
+      padding: 9px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background: var(--gray);
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .trailStep.active {
+      border-color: var(--blue-border);
+      background: var(--blue);
+    }
+
+    .trailStep.done {
+      border-color: var(--green-border);
+      background: var(--green);
+      color: #236b35;
+    }
+
+    .diagramNote {
+      margin-bottom: 10px;
+      color: #5b6b7a;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .diagramWrap {
+      overflow-x: auto;
+      padding: 14px;
+      border: 1px solid var(--gray-border);
+      border-radius: 10px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    svg {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+    }
+
+    .question {
+      margin: 14px 0;
+      padding: 14px;
+      border: 1px solid var(--gray-border);
+      border-radius: 9px;
+      background: #ffffff;
+    }
+
+    .question.correct {
+      border: 2px solid var(--green-border);
+      background: #f4fff6;
+    }
+
+    .question.incorrect {
+      border: 2px solid var(--danger);
+      background: var(--danger-bg);
+    }
+
+    fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    legend {
+      margin-bottom: 9px;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    .choiceList {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choiceLabel {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      padding: 10px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background: var(--gray);
+      cursor: pointer;
+    }
+
+    .choiceLabel:hover {
+      background: #edf5fa;
+    }
+
+    .choiceLabel input {
+      margin-top: 4px;
+    }
+
+    .questionFeedback {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+
+    .feedback {
+      min-height: 26px;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .feedback.good {
+      color: #236b35;
+    }
+
+    .feedback.tryAgain {
+      color: var(--danger);
+    }
+
+    .navigation {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+
+    .certificate {
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
+      border: 8px double var(--navy);
+      border-radius: 10px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .certificate::before,
+    .certificate::after {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(47, 128, 168, 0.08);
+      content: "";
+    }
+
+    .certificate::before {
+      top: -60px;
+      left: -60px;
+    }
+
+    .certificate::after {
+      right: -60px;
+      bottom: -60px;
+    }
+
+    .certificate h2 {
+      border-bottom: 0;
+      font-size: 30px;
+    }
+
+    .certificateName {
+      display: inline-block;
+      min-width: 65%;
+      margin: 12px 0;
+      padding: 8px 16px;
+      border-bottom: 2px solid var(--navy);
+      color: var(--navy);
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .certificateGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(190px, 1fr));
+      gap: 12px;
+      max-width: 740px;
+      margin: 22px auto;
+      text-align: left;
+    }
+
+    .certificateItem {
+      padding: 12px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background: var(--gray);
+    }
+
+    .verification {
+      display: inline-block;
+      padding: 10px 14px;
+      border: 2px solid var(--green-border);
+      border-radius: 8px;
+      background: var(--green);
+      color: var(--navy);
+      font-family: "Courier New", monospace;
+      font-size: 19px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 760px) {
+      .wrap {
+        padding: 10px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .caseTrail {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .certificateGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .certificateName {
+        font-size: 22px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      #certificateSection,
+      #certificateSection * {
+        visibility: visible;
+      }
+
+      #certificateSection {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .certificate {
+        min-height: 8.5in;
+        border: 8px double #0f2d44;
+      }
+
+      .noPrint {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Triangle Congruence Detective Academy</h1>
+      <p>Geometry | Unit 2 | Week 2 Prove It!</p>
+    </header>
+
+    <section class="card info" id="introSection">
+      <h2>Detective Briefing</h2>
+
+      <p>
+        The Rookie Detective needs help deciding when triangle evidence
+        proves congruence and when the evidence is incomplete.
+      </p>
+
+      <p>
+        Complete four short case files involving
+        <strong>SSS</strong>, <strong>SAS</strong>,
+        <strong>SSA</strong>, and <strong>AAA</strong>.
+      </p>
+
+      <div class="card yellow">
+        <h3 style="margin-top: 0;">Certificate Requirement</h3>
+        <p>To unlock your certificate, you must earn:</p>
+        <p>☐ 12 of 12 case-file responses correct</p>
+        <p>☐ 4 of 4 final mastery responses correct</p>
+        <p style="margin-bottom: 0;">
+          Incorrect responses may be corrected without penalty.
+        </p>
+      </div>
+
+      <label for="studentName">
+        <strong>First and last name</strong>
+      </label>
+
+      <input
+        class="nameInput"
+        id="studentName"
+        type="text"
+        maxlength="80"
+        autocomplete="name"
+        placeholder="Example: Jordan Martinez"
+      >
+
+      <div
+        class="feedback tryAgain"
+        id="nameFeedback"
+        role="alert"
+        aria-live="polite"
+      ></div>
+
+      <button class="button" id="startButton" type="button">
+        Open the First Case
+      </button>
+    </section>
+
+    <section class="card hidden" id="activitySection">
+      <div class="topbar">
+        <div
+          class="progressOuter"
+          id="progressOuter"
+          role="progressbar"
+          aria-label="Activity progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div class="progressInner" id="progressBar"></div>
+        </div>
+
+        <div class="stats" id="stats">Case 1 of 4</div>
+      </div>
+
+      <div class="caseTrail">
+        <div class="trailStep" id="trail-0">SSS Case</div>
+        <div class="trailStep" id="trail-1">SAS Case</div>
+        <div class="trailStep" id="trail-2">SSA Trap</div>
+        <div class="trailStep" id="trail-3">AAA Trap</div>
+        <div class="trailStep" id="trail-4">Final Check</div>
+        <div class="trailStep" id="trail-5">Certificate</div>
+      </div>
+
+      <div id="caseContainer"></div>
+
+      <div
+        class="feedback"
+        id="caseFeedback"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <div class="navigation">
+        <button class="button" id="checkCaseButton" type="button">
+          Check Case
+        </button>
+
+        <button
+          class="button secondary"
+          id="nextCaseButton"
+          type="button"
+          disabled
+        >
+          Next Case
+        </button>
+      </div>
+    </section>
+
+    <section class="card purple hidden" id="masterySection">
+      <h2>Final Detective Check</h2>
+
+      <p>
+        Answer all four questions correctly to receive your certificate.
+      </p>
+
+      <div id="masteryContainer"></div>
+
+      <div
+        class="feedback"
+        id="masteryFeedback"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <button class="button" id="checkMasteryButton" type="button">
+        Check Final Answers
+      </button>
+    </section>
+
+    <section class="card green hidden" id="certificateSection">
+      <div class="certificate">
+        <p style="margin: 0; color: #2f80a8; font-weight: bold;">
+          GEOMETRY | UNIT 2 | WEEK 2
+        </p>
+
+        <h2>Triangle Congruence Certificate of Mastery</h2>
+
+        <p>This certificate is awarded to</p>
+
+        <div class="certificateName" id="certificateName"></div>
+
+        <p>
+          for successfully completing the
+          <strong>Triangle Congruence Detective Academy</strong>.
+        </p>
+
+        <div class="certificateGrid">
+          <div class="certificateItem">
+            <strong>Completion Date</strong><br>
+            <span id="certificateDate"></span>
+          </div>
+
+          <div class="certificateItem">
+            <strong>Case Files</strong><br>
+            12 of 12 correct
+          </div>
+
+          <div class="certificateItem">
+            <strong>Final Detective Check</strong><br>
+            4 of 4 correct
+          </div>
+
+          <div class="certificateItem">
+            <strong>Overall Result</strong><br>
+            Mastery demonstrated
+          </div>
+        </div>
+
+        <p><strong>Verification Code</strong></p>
+
+        <div class="verification" id="verificationCode"></div>
+
+        <p style="margin-top: 22px;">
+          The student demonstrated understanding of SSS, SAS,
+          included angles, and insufficient congruence evidence.
+        </p>
+      </div>
+
+      <div class="navigation noPrint">
+        <button class="button" id="printButton" type="button">
+          Print or Save as PDF
+        </button>
+
+        <button
+          class="button secondary"
+          id="restartButton"
+          type="button"
+        >
+          Start a New Attempt
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    let studentName = "";
+    let currentCaseIndex = 0;
+    const completedCases = new Set();
+
+    const cases = generateCases();
+
+    const masteryQuestions = [
+      {
+        prompt:
+          "Which evidence proves two triangles congruent by SSS?",
+        choices: [
+          ["Three pairs of corresponding sides are congruent.", "sss"],
+          ["Three pairs of corresponding angles are congruent.", "aaa"],
+          ["Two sides and a non-included angle are congruent.", "ssa"],
+          ["Two angles and no side information are given.", "angles"]
+        ],
+        answer: "sss"
+      },
+      {
+        prompt:
+          "In SAS, where must the congruent angle be located?",
+        choices: [
+          ["Between the two congruent sides", "included"],
+          ["Opposite the longest side", "opposite"],
+          ["Anywhere in either triangle", "anywhere"],
+          ["Outside both triangles", "outside"]
+        ],
+        answer: "included"
+      },
+      {
+        prompt:
+          "Why does AAA not prove triangle congruence?",
+        choices: [
+          [
+            "Triangles may have equal corresponding angles but different side lengths.",
+            "correct"
+          ],
+          [
+            "AAA always creates right triangles.",
+            "right"
+          ],
+          [
+            "Angle measures are not preserved in congruent triangles.",
+            "not-preserved"
+          ],
+          [
+            "AAA can only be used with quadrilaterals.",
+            "quadrilateral"
+          ]
+        ],
+        answer: "correct"
+      },
+      {
+        prompt:
+          "Which statement about SSA is correct in this activity?",
+        choices: [
+          [
+            "SSA is not a general triangle congruence theorem.",
+            "correct"
+          ],
+          [
+            "SSA always proves congruence.",
+            "always"
+          ],
+          [
+            "SSA is another name for SAS.",
+            "same"
+          ],
+          [
+            "SSA proves congruence whenever one side is long.",
+            "long"
+          ]
+        ],
+        answer: "correct"
+      }
+    ];
+
+    const introSection =
+      document.getElementById("introSection");
+    const activitySection =
+      document.getElementById("activitySection");
+    const masterySection =
+      document.getElementById("masterySection");
+    const certificateSection =
+      document.getElementById("certificateSection");
+
+    const studentNameInput =
+      document.getElementById("studentName");
+    const nameFeedback =
+      document.getElementById("nameFeedback");
+
+    const progressBar =
+      document.getElementById("progressBar");
+    const progressOuter =
+      document.getElementById("progressOuter");
+    const stats =
+      document.getElementById("stats");
+
+    const caseContainer =
+      document.getElementById("caseContainer");
+    const caseFeedback =
+      document.getElementById("caseFeedback");
+    const checkCaseButton =
+      document.getElementById("checkCaseButton");
+    const nextCaseButton =
+      document.getElementById("nextCaseButton");
+
+    const masteryContainer =
+      document.getElementById("masteryContainer");
+    const masteryFeedback =
+      document.getElementById("masteryFeedback");
+    const checkMasteryButton =
+      document.getElementById("checkMasteryButton");
+
+    function randomInt(min, max) {
+      return Math.floor(
+        Math.random() * (max - min + 1)
+      ) + min;
+    }
+
+    function normalizeName(value) {
+      return value.trim().replace(/\s+/g, " ");
+    }
+
+    function validFullName(value) {
+      const parts = normalizeName(value).split(" ");
+
+      return (
+        parts.length >= 2 &&
+        parts.every((part) => part.length >= 2)
+      );
+    }
+
+    function generateCases() {
+      const sideA = randomInt(4, 7);
+      const sideB = randomInt(8, 11);
+      const sideC = randomInt(12, 15);
+
+      const sasSideA = randomInt(5, 8);
+      const sasSideB = randomInt(9, 12);
+      const sasAngle = randomInt(40, 75);
+
+      const ssaSideA = randomInt(6, 9);
+      const ssaSideB = randomInt(10, 13);
+      const ssaAngle = randomInt(30, 55);
+
+      const angleA = randomInt(35, 50);
+      const angleB = randomInt(55, 70);
+      const angleC = 180 - angleA - angleB;
+
+      return [
+        {
+          title: "Case 1: Three-Side Evidence",
+          subtitle: "Determine whether the Rookie has enough evidence.",
+          type: "sss",
+          labels: {
+            left: [sideA, sideB, sideC],
+            right: [sideA, sideB, sideC]
+          },
+          questions: [
+            {
+              prompt:
+                "Which congruence theorem matches the marked evidence?",
+              choices: [
+                ["SSS", "sss"],
+                ["SAS", "sas"],
+                ["SSA", "ssa"],
+                ["AAA", "aaa"]
+              ],
+              answer: "sss"
+            },
+            {
+              prompt:
+                "What evidence is provided?",
+              choices: [
+                [
+                  "Three pairs of corresponding sides are congruent.",
+                  "three-sides"
+                ],
+                [
+                  "Two sides and an included angle are congruent.",
+                  "two-included"
+                ],
+                [
+                  "Three pairs of angles are congruent.",
+                  "three-angles"
+                ],
+                [
+                  "Two sides and a non-included angle are congruent.",
+                  "nonincluded"
+                ]
+              ],
+              answer: "three-sides"
+            },
+            {
+              prompt:
+                "Can the triangles be proven congruent?",
+              choices: [
+                ["Yes, by SSS.", "yes"],
+                ["No, because no angles are given.", "no"]
+              ],
+              answer: "yes"
+            }
+          ]
+        },
+        {
+          title: "Case 2: The Included-Angle Test",
+          subtitle:
+            "Check whether the angle is between the two marked sides.",
+          type: "sas",
+          labels: {
+            sides: [sasSideA, sasSideB],
+            angle: sasAngle
+          },
+          questions: [
+            {
+              prompt:
+                "Which congruence theorem matches the evidence?",
+              choices: [
+                ["SSS", "sss"],
+                ["SAS", "sas"],
+                ["SSA", "ssa"],
+                ["AAA", "aaa"]
+              ],
+              answer: "sas"
+            },
+            {
+              prompt:
+                "Why is the marked angle useful for SAS?",
+              choices: [
+                [
+                  "It is included between the two marked sides.",
+                  "included"
+                ],
+                [
+                  "It is opposite both marked sides.",
+                  "opposite"
+                ],
+                [
+                  "Any marked angle automatically proves SAS.",
+                  "any"
+                ],
+                [
+                  "It is the largest angle.",
+                  "largest"
+                ]
+              ],
+              answer: "included"
+            },
+            {
+              prompt:
+                "Can the triangles be proven congruent?",
+              choices: [
+                ["Yes, by SAS.", "yes"],
+                ["No, because a third side is required.", "no"]
+              ],
+              answer: "yes"
+            }
+          ]
+        },
+        {
+          title: "Case 3: The SSA Trap",
+          subtitle:
+            "The Rookie sees two sides and an angle. Is that enough?",
+          type: "ssa",
+          labels: {
+            sides: [ssaSideA, ssaSideB],
+            angle: ssaAngle
+          },
+          questions: [
+            {
+              prompt:
+                "Which evidence pattern is shown?",
+              choices: [
+                ["SSS", "sss"],
+                ["SAS", "sas"],
+                ["SSA", "ssa"],
+                ["AAA", "aaa"]
+              ],
+              answer: "ssa"
+            },
+            {
+              prompt:
+                "Why does this evidence fail to prove congruence?",
+              choices: [
+                [
+                  "The angle is not included between the two known sides.",
+                  "not-included"
+                ],
+                [
+                  "Side lengths cannot be used in congruence proofs.",
+                  "no-sides"
+                ],
+                [
+                  "Every triangle must contain a right angle.",
+                  "right"
+                ],
+                [
+                  "The triangles are drawn in different locations.",
+                  "location"
+                ]
+              ],
+              answer: "not-included"
+            },
+            {
+              prompt:
+                "Which additional information could create a valid congruence theorem?",
+              choices: [
+                [
+                  "A third pair of corresponding sides, creating SSS",
+                  "third-side"
+                ],
+                [
+                  "Only the perimeter of one triangle",
+                  "perimeter"
+                ],
+                [
+                  "The color of the triangles",
+                  "color"
+                ],
+                [
+                  "The location of each triangle on the page",
+                  "location"
+                ]
+              ],
+              answer: "third-side"
+            }
+          ]
+        },
+        {
+          title: "Case 4: The AAA Trap",
+          subtitle:
+            "The triangles have matching angles but different sizes.",
+          type: "aaa",
+          labels: {
+            angles: [angleA, angleB, angleC]
+          },
+          questions: [
+            {
+              prompt:
+                "Which evidence pattern is shown?",
+              choices: [
+                ["SSS", "sss"],
+                ["SAS", "sas"],
+                ["SSA", "ssa"],
+                ["AAA", "aaa"]
+              ],
+              answer: "aaa"
+            },
+            {
+              prompt:
+                "What can AAA establish?",
+              choices: [
+                [
+                  "The triangles are similar.",
+                  "similar"
+                ],
+                [
+                  "The triangles must be congruent.",
+                  "congruent"
+                ],
+                [
+                  "All corresponding sides are equal.",
+                  "equal-sides"
+                ],
+                [
+                  "Both triangles have the same perimeter.",
+                  "perimeter"
+                ]
+              ],
+              answer: "similar"
+            },
+            {
+              prompt:
+                "Why is the evidence insufficient for congruence?",
+              choices: [
+                [
+                  "The triangles can have the same angle measures but different side lengths.",
+                  "different-size"
+                ],
+                [
+                  "Triangles cannot have three angles.",
+                  "three"
+                ],
+                [
+                  "Equal angles always create equal side lengths.",
+                  "equal"
+                ],
+                [
+                  "AAA applies only to circles.",
+                  "circles"
+                ]
+              ],
+              answer: "different-size"
+            }
+          ]
+        }
+      ];
+    }
+
+    function createSvgElement(name) {
+      return document.createElementNS(SVG_NS, name);
+    }
+
+    function addText(svg, text, x, y, size, color, weight) {
+      const element = createSvgElement("text");
+
+      element.textContent = text;
+      element.setAttribute("x", x);
+      element.setAttribute("y", y);
+      element.setAttribute("font-size", size);
+      element.setAttribute("fill", color || "#1f2933");
+      element.setAttribute("font-weight", weight || "normal");
+      element.setAttribute("text-anchor", "middle");
+
+      svg.appendChild(element);
+    }
+
+    function addLine(svg, x1, y1, x2, y2, color, width) {
+      const line = createSvgElement("line");
+
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", color || "#0f2d44");
+      line.setAttribute("stroke-width", width || 3);
+
+      svg.appendChild(line);
+    }
+
+    function addTriangle(svg, points, fill, stroke) {
+      const polygon = createSvgElement("polygon");
+
+      polygon.setAttribute(
+        "points",
+        points.map((point) => point.join(",")).join(" ")
+      );
+
+      polygon.setAttribute("fill", fill);
+      polygon.setAttribute("fill-opacity", "0.13");
+      polygon.setAttribute("stroke", stroke);
+      polygon.setAttribute("stroke-width", "4");
+
+      svg.appendChild(polygon);
+    }
+
+    function drawCaseDiagram(caseData) {
+      const svg = createSvgElement("svg");
+
+      svg.setAttribute("viewBox", "0 0 760 340");
+      svg.setAttribute(
+        "aria-label",
+        "Two triangle diagrams with marked congruence evidence"
+      );
+
+      const left = [
+        [70, 275],
+        [290, 275],
+        [170, 65]
+      ];
+
+      const right = caseData.type === "aaa"
+        ? [
+            [430, 285],
+            [720, 285],
+            [555, 70]
+          ]
+        : [
+            [455, 275],
+            [675, 275],
+            [565, 65]
+          ];
+
+      addTriangle(svg, left, "#111827", "#111827");
+      addTriangle(svg, right, "#2f80a8", "#2f80a8");
+
+      addText(svg, "△ABC", 175, 325, 18, "#111827", "bold");
+      addText(svg, "△DEF", 565, 325, 18, "#0f2d44", "bold");
+
+      if (caseData.type === "sss") {
+        const leftLabels = caseData.labels.left;
+        const rightLabels = caseData.labels.right;
+
+        addText(svg, leftLabels[0], 180, 300, 17, "#111827", "bold");
+        addText(svg, leftLabels[1], 105, 165, 17, "#111827", "bold");
+        addText(svg, leftLabels[2], 245, 165, 17, "#111827", "bold");
+
+        addText(svg, rightLabels[0], 565, 300, 17, "#0f2d44", "bold");
+        addText(svg, rightLabels[1], 490, 165, 17, "#0f2d44", "bold");
+        addText(svg, rightLabels[2], 640, 165, 17, "#0f2d44", "bold");
+
+        addText(svg, "All three corresponding side pairs match", 380, 30, 17, "#0f2d44", "bold");
+      }
+
+      if (caseData.type === "sas") {
+        const side1 = caseData.labels.sides[0];
+        const side2 = caseData.labels.sides[1];
+        const angle = caseData.labels.angle;
+
+        addText(svg, side1, 180, 300, 17, "#111827", "bold");
+        addText(svg, side2, 105, 165, 17, "#111827", "bold");
+        addText(svg, `${angle}°`, 95, 260, 17, "#111827", "bold");
+
+        addText(svg, side1, 565, 300, 17, "#0f2d44", "bold");
+        addText(svg, side2, 490, 165, 17, "#0f2d44", "bold");
+        addText(svg, `${angle}°`, 480, 260, 17, "#0f2d44", "bold");
+
+        addText(svg, "The angle is between the two labeled sides", 380, 30, 17, "#0f2d44", "bold");
+      }
+
+      if (caseData.type === "ssa") {
+        const side1 = caseData.labels.sides[0];
+        const side2 = caseData.labels.sides[1];
+        const angle = caseData.labels.angle;
+
+        addText(svg, side1, 180, 300, 17, "#111827", "bold");
+        addText(svg, side2, 105, 165, 17, "#111827", "bold");
+        addText(svg, `${angle}°`, 245, 255, 17, "#111827", "bold");
+
+        addText(svg, side1, 565, 300, 17, "#0f2d44", "bold");
+        addText(svg, side2, 490, 165, 17, "#0f2d44", "bold");
+        addText(svg, `${angle}°`, 635, 255, 17, "#0f2d44", "bold");
+
+        addText(svg, "The marked angle is not between the two labeled sides", 380, 30, 17, "#0f2d44", "bold");
+      }
+
+      if (caseData.type === "aaa") {
+        const angles = caseData.labels.angles;
+
+        addText(svg, `${angles[0]}°`, 105, 260, 16, "#111827", "bold");
+        addText(svg, `${angles[1]}°`, 245, 260, 16, "#111827", "bold");
+        addText(svg, `${angles[2]}°`, 170, 95, 16, "#111827", "bold");
+
+        addText(svg, `${angles[0]}°`, 470, 270, 16, "#0f2d44", "bold");
+        addText(svg, `${angles[1]}°`, 680, 270, 16, "#0f2d44", "bold");
+        addText(svg, `${angles[2]}°`, 555, 100, 16, "#0f2d44", "bold");
+
+        addText(svg, "Same angles, different side lengths", 380, 30, 17, "#0f2d44", "bold");
+
+        addLine(svg, 430, 305, 720, 305, "#b42318", 2);
+        addText(svg, "Larger scale", 575, 330, 14, "#b42318", "bold");
+      }
+
+      return svg;
+    }
+
+    function renderQuestion(question, index, prefix) {
+      const wrapper = document.createElement("div");
+      const fieldset = document.createElement("fieldset");
+      const legend = document.createElement("legend");
+      const choiceList = document.createElement("div");
+      const feedback = document.createElement("div");
+
+      wrapper.className = "question";
+      wrapper.dataset.questionIndex = String(index);
+
+      legend.textContent = `${index + 1}. ${question.prompt}`;
+      choiceList.className = "choiceList";
+
+      question.choices.forEach(([text, value]) => {
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        const span = document.createElement("span");
+
+        label.className = "choiceLabel";
+
+        input.type = "radio";
+        input.name = `${prefix}-${index}`;
+        input.value = value;
+
+        span.textContent = text;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        choiceList.appendChild(label);
+      });
+
+      feedback.className = "questionFeedback";
+      feedback.setAttribute("aria-live", "polite");
+
+      fieldset.appendChild(legend);
+      fieldset.appendChild(choiceList);
+
+      wrapper.appendChild(fieldset);
+      wrapper.appendChild(feedback);
+
+      return wrapper;
+    }
+
+    function startActivity() {
+      const enteredName =
+        normalizeName(studentNameInput.value);
+
+      if (!validFullName(enteredName)) {
+        nameFeedback.textContent =
+          "Enter both your first and last name before beginning.";
+
+        studentNameInput.focus();
+        return;
+      }
+
+      studentName = enteredName;
+      currentCaseIndex = 0;
+      completedCases.clear();
+
+      introSection.classList.add("hidden");
+      activitySection.classList.remove("hidden");
+
+      renderCase();
+      updateProgress();
+
+      window.scrollTo({
+        top: activitySection.offsetTop - 10,
+        behavior: "smooth"
+      });
+    }
+
+    function renderCase() {
+      const caseData = cases[currentCaseIndex];
+
+      caseContainer.innerHTML = "";
+      caseFeedback.textContent = "";
+      caseFeedback.className = "feedback";
+
+      checkCaseButton.disabled = false;
+      nextCaseButton.disabled = true;
+
+      const heading = document.createElement("h2");
+      const subtitle = document.createElement("p");
+      const note = document.createElement("p");
+      const diagramWrap = document.createElement("div");
+
+      heading.textContent = caseData.title;
+      subtitle.textContent = caseData.subtitle;
+
+      note.className = "diagramNote";
+      note.textContent =
+        "Diagram is not necessarily drawn to scale. Use the labeled evidence.";
+
+      diagramWrap.className = "diagramWrap";
+      diagramWrap.appendChild(drawCaseDiagram(caseData));
+
+      caseContainer.appendChild(heading);
+      caseContainer.appendChild(subtitle);
+      caseContainer.appendChild(note);
+      caseContainer.appendChild(diagramWrap);
+
+      caseData.questions.forEach((question, index) => {
+        caseContainer.appendChild(
+          renderQuestion(
+            question,
+            index,
+            `case-${currentCaseIndex}`
+          )
+        );
+      });
+
+      nextCaseButton.textContent =
+        currentCaseIndex === cases.length - 1
+          ? "Continue to Final Check"
+          : "Next Case";
+
+      updateProgress();
+    }
+
+    function checkQuestion(wrapper, question, prefix, index) {
+      const checked = wrapper.querySelector(
+        `input[name="${prefix}-${index}"]:checked`
+      );
+
+      const feedback =
+        wrapper.querySelector(".questionFeedback");
+
+      wrapper.classList.remove("correct", "incorrect");
+
+      const correct =
+        checked && checked.value === question.answer;
+
+      if (correct) {
+        wrapper.classList.add("correct");
+        feedback.textContent = "Correct.";
+      } else {
+        wrapper.classList.add("incorrect");
+        feedback.textContent =
+          "Not yet. Review the labeled evidence and try again.";
+      }
+
+      return correct;
+    }
+
+    function checkCase() {
+      const caseData = cases[currentCaseIndex];
+      const wrappers = [
+        ...caseContainer.querySelectorAll(".question")
+      ];
+
+      let correctCount = 0;
+
+      wrappers.forEach((wrapper, index) => {
+        if (
+          checkQuestion(
+            wrapper,
+            caseData.questions[index],
+            `case-${currentCaseIndex}`,
+            index
+          )
+        ) {
+          correctCount += 1;
+        }
+      });
+
+      if (correctCount === caseData.questions.length) {
+        completedCases.add(currentCaseIndex);
+
+        caseFeedback.textContent =
+          "Case solved! All three responses are correct.";
+
+        caseFeedback.className = "feedback good";
+        checkCaseButton.disabled = true;
+        nextCaseButton.disabled = false;
+
+        updateProgress();
+        nextCaseButton.focus();
+        return;
+      }
+
+      const remaining =
+        caseData.questions.length - correctCount;
+
+      caseFeedback.textContent =
+        `${correctCount} of ${caseData.questions.length} are correct. Correct the remaining ${remaining} response${remaining === 1 ? "" : "s"} and check again.`;
+
+      caseFeedback.className = "feedback tryAgain";
+
+      const firstIncorrect =
+        caseContainer.querySelector(".question.incorrect");
+
+      if (firstIncorrect) {
+        firstIncorrect.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    }
+
+    function advanceCase() {
+      if (!completedCases.has(currentCaseIndex)) {
+        return;
+      }
+
+      currentCaseIndex += 1;
+
+      if (currentCaseIndex < cases.length) {
+        renderCase();
+
+        window.scrollTo({
+          top: activitySection.offsetTop - 10,
+          behavior: "smooth"
+        });
+
+        return;
+      }
+
+      showMastery();
+    }
+
+    function updateProgress() {
+      const completedCount = completedCases.size;
+      const percent = Math.round(
+        (completedCount / 4) * 75
+      );
+
+      progressBar.style.width = `${percent}%`;
+      progressOuter.setAttribute(
+        "aria-valuenow",
+        String(percent)
+      );
+
+      stats.textContent =
+        currentCaseIndex < 4
+          ? `Case ${currentCaseIndex + 1} of 4`
+          : "Case files complete";
+
+      for (let index = 0; index < 6; index += 1) {
+        const step =
+          document.getElementById(`trail-${index}`);
+
+        step.classList.remove("active", "done");
+
+        if (index < completedCount) {
+          step.classList.add("done");
+
+          if (index === 0) step.textContent = "SSS Case ✓";
+          if (index === 1) step.textContent = "SAS Case ✓";
+          if (index === 2) step.textContent = "SSA Trap ✓";
+          if (index === 3) step.textContent = "AAA Trap ✓";
+        } else if (index === currentCaseIndex) {
+          step.classList.add("active");
+        }
+      }
+    }
+
+    function showMastery() {
+      activitySection.classList.add("hidden");
+      masterySection.classList.remove("hidden");
+
+      masteryContainer.innerHTML = "";
+      masteryFeedback.textContent = "";
+      masteryFeedback.className = "feedback";
+      checkMasteryButton.disabled = false;
+
+      masteryQuestions.forEach((question, index) => {
+        masteryContainer.appendChild(
+          renderQuestion(question, index, "mastery")
+        );
+      });
+
+      document.getElementById("trail-4")
+        .classList.add("active");
+
+      window.scrollTo({
+        top: masterySection.offsetTop - 10,
+        behavior: "smooth"
+      });
+    }
+
+    function checkMastery() {
+      const wrappers = [
+        ...masteryContainer.querySelectorAll(".question")
+      ];
+
+      let correctCount = 0;
+
+      wrappers.forEach((wrapper, index) => {
+        if (
+          checkQuestion(
+            wrapper,
+            masteryQuestions[index],
+            "mastery",
+            index
+          )
+        ) {
+          correctCount += 1;
+        }
+      });
+
+      if (correctCount === masteryQuestions.length) {
+        masteryFeedback.textContent =
+          "Final check complete! Your certificate is ready.";
+
+        masteryFeedback.className = "feedback good";
+        checkMasteryButton.disabled = true;
+
+        setTimeout(showCertificate, 450);
+        return;
+      }
+
+      const remaining =
+        masteryQuestions.length - correctCount;
+
+      masteryFeedback.textContent =
+        `${correctCount} of ${masteryQuestions.length} are correct. Correct the remaining ${remaining} response${remaining === 1 ? "" : "s"} and check again.`;
+
+      masteryFeedback.className = "feedback tryAgain";
+    }
+
+    function showCertificate() {
+      masterySection.classList.add("hidden");
+      certificateSection.classList.remove("hidden");
+
+      const now = new Date();
+
+      document.getElementById("certificateName")
+        .textContent = studentName;
+
+      document.getElementById("certificateDate")
+        .textContent = now.toLocaleDateString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          }
+        );
+
+      document.getElementById("verificationCode")
+        .textContent =
+          createVerificationCode(studentName, now);
+
+      document.getElementById("trail-4")
+        .classList.remove("active");
+
+      document.getElementById("trail-4")
+        .classList.add("done");
+
+      document.getElementById("trail-4")
+        .textContent = "Final Check ✓";
+
+      document.getElementById("trail-5")
+        .classList.add("done");
+
+      document.getElementById("trail-5")
+        .textContent = "Certificate ✓";
+
+      window.scrollTo({
+        top: certificateSection.offsetTop - 10,
+        behavior: "smooth"
+      });
+    }
+
+    function createVerificationCode(name, date) {
+      const datePart = [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+      ].join("");
+
+      const source =
+        `${name.toUpperCase()}|${datePart}|GEO-U2L2|12|4`;
+
+      let hash = 2166136261;
+
+      for (
+        let index = 0;
+        index < source.length;
+        index += 1
+      ) {
+        hash ^= source.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+      }
+
+      const hashPart =
+        (hash >>> 0)
+          .toString(36)
+          .toUpperCase()
+          .padStart(7, "0")
+          .slice(0, 7);
+
+      return `GEO-U2L2-${datePart}-${hashPart}`;
+    }
+
+    document.getElementById("startButton")
+      .addEventListener("click", startActivity);
+
+    studentNameInput.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "Enter") {
+          startActivity();
+        }
+      }
+    );
+
+    checkCaseButton.addEventListener(
+      "click",
+      checkCase
+    );
+
+    nextCaseButton.addEventListener(
+      "click",
+      advanceCase
+    );
+
+    checkMasteryButton.addEventListener(
+      "click",
+      checkMastery
+    );
+
+    document.getElementById("printButton")
+      .addEventListener(
+        "click",
+        () => window.print()
+      );
+
+    document.getElementById("restartButton")
+      .addEventListener(
+        "click",
+        () => window.location.reload()
+      );
+  </script>
+</body>
+</html>
