@@ -44,7 +44,8 @@
     }
 
     button,
-    input {
+    input,
+    textarea {
       font: inherit;
     }
 
@@ -300,6 +301,135 @@
       font-weight: bold;
     }
 
+    .workPrompt {
+      display: block;
+      margin: 14px 0 6px;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    .workBox {
+      width: 100%;
+      min-height: 95px;
+      padding: 11px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+      resize: vertical;
+    }
+
+    .workBox:focus {
+      outline: 4px solid rgba(242, 183, 5, 0.42);
+      outline-offset: 2px;
+    }
+
+    .whiteboardBlock {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--gray-border);
+      border-radius: 10px;
+      background: var(--blue);
+    }
+
+    .whiteboardTitle {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    .whiteboardHelp {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .whiteboardCanvas {
+      display: block;
+      width: 100%;
+      height: 220px;
+      border: 2px solid #7f9fb2;
+      border-radius: 8px;
+      background: #ffffff;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .whiteboardControls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .whiteboardButton {
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 7px;
+      background: #2f80a8;
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .whiteboardButton:hover {
+      filter: brightness(1.08);
+    }
+
+    .responseRecord {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid var(--gray-border);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .responseCase,
+    .responseQuestion {
+      margin: 14px 0;
+      padding: 14px;
+      border: 1px solid var(--gray-border);
+      border-radius: 9px;
+      background: var(--gray);
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .responseItem {
+      margin: 10px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    .responseItem:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .responseLabel {
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    .typedResponse {
+      margin-top: 8px;
+      padding: 10px;
+      border-left: 4px solid var(--blue-border);
+      background: #ffffff;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .whiteboardSavedImage {
+      display: block;
+      width: 100%;
+      max-width: 760px;
+      margin-top: 8px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      background: #ffffff;
+      object-fit: contain;
+    }
+
     .feedback {
       min-height: 26px;
       margin-top: 12px;
@@ -447,6 +577,25 @@
       .certificate {
         min-height: 8.5in;
         border: 8px double #0f2d44;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .responseRecord {
+        margin-top: 0;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .responseCase,
+      .responseQuestion {
+        background: #ffffff;
+      }
+
+      .whiteboardSavedImage {
+        max-height: 4.2in;
+        object-fit: contain;
       }
 
       .noPrint {
@@ -475,6 +624,8 @@
         Complete four short case files involving
         <strong>SSS</strong>, <strong>SAS</strong>,
         <strong>SSA</strong>, and <strong>AAA</strong>.
+        Type an explanation when helpful, and use the whiteboard on questions
+        where you should show diagram reasoning or supporting work.
       </p>
 
       <div class="card yellow">
@@ -567,7 +718,9 @@
       <h2>Final Detective Check</h2>
 
       <p>
-        Answer all four questions correctly to receive your certificate.
+        Answer all four questions correctly to receive your completion page.
+        Your final record will include answers, typed reasoning, whiteboard work
+        where appropriate, check counts, and elapsed time.
       </p>
 
       <div id="masteryContainer"></div>
@@ -621,6 +774,11 @@
             <strong>Overall Result</strong><br>
             Mastery demonstrated
           </div>
+
+          <div class="certificateItem">
+            <strong>Elapsed Time</strong><br>
+            <span id="certificateElapsedTime"></span>
+          </div>
         </div>
 
         <p><strong>Verification Code</strong></p>
@@ -631,6 +789,31 @@
           The student demonstrated understanding of SSS, SAS,
           included angles, and insufficient congruence evidence.
         </p>
+      </div>
+
+      <div class="card yellow">
+        <h3 style="margin-top: 0;">Ready to Submit</h3>
+        <p>
+          Your completion page includes the certificate and a complete response
+          record showing final answers, typed explanations, whiteboard work where
+          appropriate, checks used for each question, and total elapsed time.
+        </p>
+      </div>
+
+      <div class="responseRecord" id="responseRecord">
+        <h2>Student Response Record</h2>
+        <p>
+          <strong>Student:</strong> <span id="responseStudentName"></span><br>
+          <strong>Completion date:</strong> <span id="responseCompletionDate"></span><br>
+          <strong>Elapsed time:</strong> <span id="responseElapsedTime"></span><br>
+          <strong>Verification code:</strong> <span id="responseVerificationCode"></span>
+        </p>
+
+        <h2>Case File Responses</h2>
+        <div id="caseResponseSummary"></div>
+
+        <h2 style="margin-top: 28px;">Final Detective Check Responses</h2>
+        <div id="masteryResponseSummary"></div>
       </div>
 
       <div class="navigation noPrint">
@@ -657,6 +840,21 @@
     let studentName = "";
     let currentCaseIndex = 0;
     const completedCases = new Set();
+
+    let activityStartTime = null;
+    let activityEndTime = null;
+
+    let caseResponses = {};
+    let caseWork = {};
+    let caseWhiteboards = {};
+    let caseWhiteboardHasInk = {};
+    let caseCheckCounts = {};
+
+    let masteryResponses = [];
+    let masteryWork = [];
+    let masteryWhiteboards = [];
+    let masteryWhiteboardHasInk = [];
+    let masteryCheckCounts = [];
 
     const cases = generateCases();
 
@@ -767,6 +965,21 @@
       document.getElementById("masteryFeedback");
     const checkMasteryButton =
       document.getElementById("checkMasteryButton");
+
+    const certificateElapsedTime =
+      document.getElementById("certificateElapsedTime");
+    const responseStudentName =
+      document.getElementById("responseStudentName");
+    const responseCompletionDate =
+      document.getElementById("responseCompletionDate");
+    const responseElapsedTime =
+      document.getElementById("responseElapsedTime");
+    const responseVerificationCode =
+      document.getElementById("responseVerificationCode");
+    const caseResponseSummary =
+      document.getElementById("caseResponseSummary");
+    const masteryResponseSummary =
+      document.getElementById("masteryResponseSummary");
 
     function randomInt(min, max) {
       return Math.floor(
@@ -1054,6 +1267,531 @@
       ];
     }
 
+    function questionNeedsWhiteboard(question, prefix, index) {
+      const prompt =
+        String(question.prompt || "").toLowerCase();
+
+      return (
+        prompt.includes("why") ||
+        prompt.includes("what evidence") ||
+        prompt.includes("additional information") ||
+        prompt.includes("prove") ||
+        prompt.includes("included angle") ||
+        prompt.includes("insufficient") ||
+        prompt.includes("congruence theorem")
+      );
+    }
+
+    function createWorkElements(question, index, prefix) {
+      const fragment =
+        document.createDocumentFragment();
+
+      const workLabel =
+        document.createElement("label");
+      const workBox =
+        document.createElement("textarea");
+
+      workLabel.className = "workPrompt";
+      workLabel.htmlFor =
+        `${prefix}-${index}-work`;
+      workLabel.textContent =
+        "Explain your reasoning or show supporting work";
+
+      workBox.className = "workBox";
+      workBox.id =
+        `${prefix}-${index}-work`;
+      workBox.dataset.workIndex =
+        String(index);
+      workBox.maxLength = 4000;
+      workBox.placeholder =
+        "Type your congruence reasoning, theorem justification, or supporting explanation here...";
+
+      fragment.appendChild(workLabel);
+      fragment.appendChild(workBox);
+
+      if (
+        questionNeedsWhiteboard(
+          question,
+          prefix,
+          index
+        )
+      ) {
+        const block =
+          document.createElement("div");
+        const title =
+          document.createElement("div");
+        const help =
+          document.createElement("p");
+        const canvas =
+          document.createElement("canvas");
+        const controls =
+          document.createElement("div");
+        const clearButton =
+          document.createElement("button");
+
+        block.className = "whiteboardBlock";
+
+        title.className = "whiteboardTitle";
+        title.textContent = "Whiteboard workspace";
+
+        help.className = "whiteboardHelp";
+        help.textContent =
+          "Use this space to mark corresponding sides or angles, sketch supporting diagrams, or show theorem reasoning. Saved work will appear in the final PDF.";
+
+        canvas.className = "whiteboardCanvas";
+        canvas.id =
+          `${prefix}-${index}-whiteboard`;
+        canvas.width = 900;
+        canvas.height = 300;
+        canvas.setAttribute(
+          "aria-label",
+          `Whiteboard workspace for question ${index + 1}`
+        );
+
+        controls.className =
+          "whiteboardControls";
+
+        clearButton.className =
+          "whiteboardButton";
+        clearButton.type = "button";
+        clearButton.textContent =
+          "Clear Whiteboard";
+
+        controls.appendChild(clearButton);
+
+        block.appendChild(title);
+        block.appendChild(help);
+        block.appendChild(canvas);
+        block.appendChild(controls);
+
+        fragment.appendChild(block);
+
+        setTimeout(() => {
+          setupWhiteboard(
+            canvas,
+            clearButton,
+            prefix,
+            index
+          );
+        }, 0);
+      }
+
+      return fragment;
+    }
+
+    function whiteboardLocation(prefix, index) {
+      if (prefix === "mastery") {
+        return {
+          type: "mastery",
+          index
+        };
+      }
+
+      const match =
+        /^case-(\d+)$/.exec(prefix);
+
+      return {
+        type: "case",
+        caseIndex:
+          match
+            ? Number(match[1])
+            : currentCaseIndex,
+        index
+      };
+    }
+
+    function getSavedWhiteboard(prefix, index) {
+      const location =
+        whiteboardLocation(prefix, index);
+
+      if (location.type === "mastery") {
+        return {
+          dataUrl:
+            masteryWhiteboards[index] || "",
+          hasInk:
+            Boolean(
+              masteryWhiteboardHasInk[index]
+            )
+        };
+      }
+
+      return {
+        dataUrl:
+          (
+            (
+              caseWhiteboards[
+                location.caseIndex
+              ] || []
+            )[index]
+          ) || "",
+        hasInk:
+          Boolean(
+            (
+              (
+                caseWhiteboardHasInk[
+                  location.caseIndex
+                ] || []
+              )[index]
+            )
+          )
+      };
+    }
+
+    function saveWhiteboard(
+      prefix,
+      index,
+      canvas,
+      hasInk
+    ) {
+      const copy =
+        document.createElement("canvas");
+
+      copy.width = canvas.width;
+      copy.height = canvas.height;
+
+      const context =
+        copy.getContext("2d");
+
+      context.fillStyle = "#ffffff";
+      context.fillRect(
+        0,
+        0,
+        copy.width,
+        copy.height
+      );
+      context.drawImage(canvas, 0, 0);
+
+      const dataUrl =
+        copy.toDataURL("image/png");
+
+      const location =
+        whiteboardLocation(prefix, index);
+
+      if (location.type === "mastery") {
+        masteryWhiteboards[index] =
+          dataUrl;
+        masteryWhiteboardHasInk[index] =
+          hasInk;
+        return;
+      }
+
+      caseWhiteboards[
+        location.caseIndex
+      ] =
+        caseWhiteboards[
+          location.caseIndex
+        ] ||
+        cases[
+          location.caseIndex
+        ].questions.map(() => "");
+
+      caseWhiteboardHasInk[
+        location.caseIndex
+      ] =
+        caseWhiteboardHasInk[
+          location.caseIndex
+        ] ||
+        cases[
+          location.caseIndex
+        ].questions.map(() => false);
+
+      caseWhiteboards[
+        location.caseIndex
+      ][index] = dataUrl;
+
+      caseWhiteboardHasInk[
+        location.caseIndex
+      ][index] = hasInk;
+    }
+
+    function setupWhiteboard(
+      canvas,
+      clearButton,
+      prefix,
+      index
+    ) {
+      const context =
+        canvas.getContext("2d");
+
+      let drawing = false;
+      let moved = false;
+
+      context.lineWidth = 4;
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.strokeStyle = "#1f2933";
+      context.fillStyle = "#ffffff";
+      context.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const saved =
+        getSavedWhiteboard(
+          prefix,
+          index
+        );
+
+      if (saved.dataUrl) {
+        const image = new Image();
+
+        image.onload = () => {
+          context.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          context.drawImage(
+            image,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+        };
+
+        image.src = saved.dataUrl;
+      }
+
+      function pointerPosition(event) {
+        const rect =
+          canvas.getBoundingClientRect();
+
+        return {
+          x:
+            (event.clientX - rect.left) *
+            (canvas.width / rect.width),
+          y:
+            (event.clientY - rect.top) *
+            (canvas.height / rect.height)
+        };
+      }
+
+      canvas.addEventListener(
+        "pointerdown",
+        (event) => {
+          event.preventDefault();
+          canvas.setPointerCapture(
+            event.pointerId
+          );
+
+          const point =
+            pointerPosition(event);
+
+          drawing = true;
+          moved = false;
+
+          context.beginPath();
+          context.moveTo(
+            point.x,
+            point.y
+          );
+        }
+      );
+
+      canvas.addEventListener(
+        "pointermove",
+        (event) => {
+          if (!drawing) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const point =
+            pointerPosition(event);
+
+          context.lineTo(
+            point.x,
+            point.y
+          );
+          context.stroke();
+          moved = true;
+        }
+      );
+
+      function finishDrawing(event) {
+        if (!drawing) {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (!moved) {
+          const point =
+            pointerPosition(event);
+
+          context.beginPath();
+          context.arc(
+            point.x,
+            point.y,
+            2,
+            0,
+            Math.PI * 2
+          );
+          context.fillStyle = "#1f2933";
+          context.fill();
+        }
+
+        drawing = false;
+        context.closePath();
+
+        saveWhiteboard(
+          prefix,
+          index,
+          canvas,
+          true
+        );
+      }
+
+      canvas.addEventListener(
+        "pointerup",
+        finishDrawing
+      );
+      canvas.addEventListener(
+        "pointercancel",
+        finishDrawing
+      );
+
+      clearButton.addEventListener(
+        "click",
+        () => {
+          context.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          context.fillStyle = "#ffffff";
+          context.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          saveWhiteboard(
+            prefix,
+            index,
+            canvas,
+            false
+          );
+        }
+      );
+    }
+
+    function formatElapsedTime(milliseconds) {
+      const totalSeconds =
+        Math.max(
+          0,
+          Math.round(milliseconds / 1000)
+        );
+
+      const hours =
+        Math.floor(totalSeconds / 3600);
+
+      const minutes =
+        Math.floor(
+          (totalSeconds % 3600) / 60
+        );
+
+      const seconds =
+        totalSeconds % 60;
+
+      if (hours > 0) {
+        return `${hours} hr ${minutes} min ${seconds} sec`;
+      }
+
+      if (minutes > 0) {
+        return `${minutes} min ${seconds} sec`;
+      }
+
+      return `${seconds} sec`;
+    }
+
+    function addTextElement(
+      parent,
+      tagName,
+      text,
+      className
+    ) {
+      const element =
+        document.createElement(tagName);
+
+      if (className) {
+        element.className = className;
+      }
+
+      element.textContent = text;
+      parent.appendChild(element);
+
+      return element;
+    }
+
+    function appendWorkAndWhiteboard(
+      parent,
+      typedWork,
+      whiteboardData,
+      whiteboardHasInk,
+      altText
+    ) {
+      addTextElement(
+        parent,
+        "div",
+        "Typed work / explanation",
+        "responseLabel"
+      );
+
+      const typed =
+        document.createElement("div");
+
+      typed.className = "typedResponse";
+      typed.textContent =
+        typedWork ||
+        "No typed work or explanation was entered for this question.";
+
+      parent.appendChild(typed);
+
+      if (whiteboardData !== undefined) {
+        const heading =
+          document.createElement("div");
+
+        heading.className =
+          "responseLabel";
+        heading.style.marginTop = "10px";
+        heading.textContent =
+          "Whiteboard work";
+
+        parent.appendChild(heading);
+
+        if (
+          whiteboardData &&
+          whiteboardHasInk
+        ) {
+          const image =
+            document.createElement("img");
+
+          image.className =
+            "whiteboardSavedImage";
+          image.src = whiteboardData;
+          image.alt = altText;
+
+          parent.appendChild(image);
+        } else {
+          addTextElement(
+            parent,
+            "div",
+            "No whiteboard work was saved for this question."
+          );
+        }
+      }
+    }
+
     function createSvgElement(name) {
       return document.createElementNS(SVG_NS, name);
     }
@@ -1239,6 +1977,13 @@
       fieldset.appendChild(choiceList);
 
       wrapper.appendChild(fieldset);
+      wrapper.appendChild(
+        createWorkElements(
+          question,
+          index,
+          prefix
+        )
+      );
       wrapper.appendChild(feedback);
 
       return wrapper;
@@ -1259,6 +2004,25 @@
       studentName = enteredName;
       currentCaseIndex = 0;
       completedCases.clear();
+
+      activityStartTime = Date.now();
+      activityEndTime = null;
+
+      caseResponses = {};
+      caseWork = {};
+      caseWhiteboards = {};
+      caseWhiteboardHasInk = {};
+      caseCheckCounts = {};
+
+      masteryResponses = [];
+      masteryWork =
+        masteryQuestions.map(() => "");
+      masteryWhiteboards =
+        masteryQuestions.map(() => "");
+      masteryWhiteboardHasInk =
+        masteryQuestions.map(() => false);
+      masteryCheckCounts =
+        masteryQuestions.map(() => 0);
 
       introSection.classList.add("hidden");
       activitySection.classList.remove("hidden");
@@ -1303,12 +2067,59 @@
       caseContainer.appendChild(diagramWrap);
 
       caseData.questions.forEach((question, index) => {
-        caseContainer.appendChild(
+        const prefix =
+          `case-${currentCaseIndex}`;
+
+        const rendered =
           renderQuestion(
             question,
             index,
-            `case-${currentCaseIndex}`
-          )
+            prefix
+          );
+
+        const saved =
+          (
+            caseResponses[
+              currentCaseIndex
+            ] || []
+          )[index];
+
+        if (
+          saved &&
+          saved.value !== undefined &&
+          saved.value !== null
+        ) {
+          const radio = [
+            ...rendered.querySelectorAll(
+              `input[name="${prefix}-${index}"]`
+            )
+          ].find(
+            (item) =>
+              item.value ===
+              String(saved.value)
+          );
+
+          if (radio) {
+            radio.checked = true;
+          }
+        }
+
+        const workBox =
+          rendered.querySelector(".workBox");
+
+        if (workBox) {
+          workBox.value =
+            (
+              (
+                caseWork[
+                  currentCaseIndex
+                ] || []
+              )[index]
+            ) || "";
+        }
+
+        caseContainer.appendChild(
+          rendered
         );
       });
 
@@ -1353,7 +2164,21 @@
 
       let correctCount = 0;
 
+      if (
+        !caseCheckCounts[
+          currentCaseIndex
+        ]
+      ) {
+        caseCheckCounts[
+          currentCaseIndex
+        ] =
+          caseData.questions.map(() => 0);
+      }
+
       wrappers.forEach((wrapper, index) => {
+        caseCheckCounts[
+          currentCaseIndex
+        ][index] += 1;
         if (
           checkQuestion(
             wrapper,
@@ -1365,6 +2190,82 @@
           correctCount += 1;
         }
       });
+
+      caseResponses[
+        currentCaseIndex
+      ] = wrappers.map(
+        (wrapper, index) => {
+          const question =
+            caseData.questions[index];
+
+          const workBox =
+            wrapper.querySelector(
+              ".workBox"
+            );
+
+          const canvas =
+            wrapper.querySelector(
+              ".whiteboardCanvas"
+            );
+
+          caseWork[
+            currentCaseIndex
+          ] =
+            caseWork[
+              currentCaseIndex
+            ] ||
+            caseData.questions.map(
+              () => ""
+            );
+
+          caseWork[
+            currentCaseIndex
+          ][index] =
+            workBox
+              ? workBox.value.trim()
+              : "";
+
+          if (canvas) {
+            const savedWhiteboard =
+              getSavedWhiteboard(
+                `case-${currentCaseIndex}`,
+                index
+              );
+
+            saveWhiteboard(
+              `case-${currentCaseIndex}`,
+              index,
+              canvas,
+              savedWhiteboard.hasInk
+            );
+          }
+
+          const checked =
+            wrapper.querySelector(
+              `input[name="case-${currentCaseIndex}-${index}"]:checked`
+            );
+
+          const labelText =
+            checked
+              ? checked.closest("label")
+                  .querySelector("span")
+                  .textContent
+              : "";
+
+          return {
+            prompt: question.prompt,
+            response: labelText,
+            value:
+              checked
+                ? checked.value
+                : null,
+            checksUsed:
+              caseCheckCounts[
+                currentCaseIndex
+              ][index] || 0
+          };
+        }
+      );
 
       if (correctCount === caseData.questions.length) {
         completedCases.add(currentCaseIndex);
@@ -1488,6 +2389,22 @@
 
       let correctCount = 0;
 
+      if (
+        !Array.isArray(
+          masteryCheckCounts
+        ) ||
+        masteryCheckCounts.length !==
+          masteryQuestions.length
+      ) {
+        masteryCheckCounts =
+          masteryQuestions.map(() => 0);
+      }
+
+      masteryCheckCounts =
+        masteryCheckCounts.map(
+          (count) => count + 1
+        );
+
       wrappers.forEach((wrapper, index) => {
         if (
           checkQuestion(
@@ -1502,8 +2419,81 @@
       });
 
       if (correctCount === masteryQuestions.length) {
+        masteryResponses =
+          wrappers.map(
+            (wrapper, index) => {
+              const question =
+                masteryQuestions[index];
+
+              const checked =
+                wrapper.querySelector(
+                  `input[name="mastery-${index}"]:checked`
+                );
+
+              const workBox =
+                wrapper.querySelector(
+                  ".workBox"
+                );
+
+              const canvas =
+                wrapper.querySelector(
+                  ".whiteboardCanvas"
+                );
+
+              masteryWork[index] =
+                workBox
+                  ? workBox.value.trim()
+                  : "";
+
+              if (canvas) {
+                const savedWhiteboard =
+                  getSavedWhiteboard(
+                    "mastery",
+                    index
+                  );
+
+                saveWhiteboard(
+                  "mastery",
+                  index,
+                  canvas,
+                  savedWhiteboard.hasInk
+                );
+              }
+
+              const labelText =
+                checked
+                  ? checked.closest("label")
+                      .querySelector("span")
+                      .textContent
+                  : "";
+
+              return {
+                prompt: question.prompt,
+                response: labelText,
+                value:
+                  checked
+                    ? checked.value
+                    : null,
+                work:
+                  masteryWork[index] || "",
+                whiteboard:
+                  masteryWhiteboards[index] || "",
+                whiteboardHasInk:
+                  Boolean(
+                    masteryWhiteboardHasInk[
+                      index
+                    ]
+                  ),
+                checksUsed:
+                  masteryCheckCounts[index] || 0
+              };
+            }
+          );
+
+        activityEndTime = Date.now();
+
         masteryFeedback.textContent =
-          "Final check complete! Your certificate is ready.";
+          "Final check complete! Your completion page is ready.";
 
         masteryFeedback.className = "feedback good";
         checkMasteryButton.disabled = true;
@@ -1521,6 +2511,187 @@
       masteryFeedback.className = "feedback tryAgain";
     }
 
+    function buildResponseRecord(
+      completionDateText,
+      elapsedTimeText,
+      code
+    ) {
+      responseStudentName.textContent =
+        studentName;
+
+      responseCompletionDate.textContent =
+        completionDateText;
+
+      responseElapsedTime.textContent =
+        elapsedTimeText;
+
+      responseVerificationCode.textContent =
+        code;
+
+      caseResponseSummary.innerHTML = "";
+      masteryResponseSummary.innerHTML = "";
+
+      cases.forEach(
+        (caseData, caseIndex) => {
+          const section =
+            document.createElement("section");
+
+          section.className =
+            "responseCase";
+
+          addTextElement(
+            section,
+            "h3",
+            caseData.title
+          );
+
+          caseData.questions.forEach(
+            (question, questionIndex) => {
+              const saved =
+                (
+                  (
+                    caseResponses[
+                      caseIndex
+                    ] || []
+                  )[questionIndex]
+                ) || {};
+
+              const item =
+                document.createElement(
+                  "div"
+                );
+
+              item.className =
+                "responseItem";
+
+              addTextElement(
+                item,
+                "div",
+                `${questionIndex + 1}. ${question.prompt}`,
+                "responseLabel"
+              );
+
+              addTextElement(
+                item,
+                "div",
+                `Student response: ${saved.response || ""}`
+              );
+
+              addTextElement(
+                item,
+                "div",
+                `Checks used: ${saved.checksUsed || 0}`
+              );
+
+              const needsBoard =
+                questionNeedsWhiteboard(
+                  question,
+                  `case-${caseIndex}`,
+                  questionIndex
+                );
+
+              appendWorkAndWhiteboard(
+                item,
+                (
+                  (
+                    caseWork[
+                      caseIndex
+                    ] || []
+                  )[questionIndex]
+                ) || "",
+                needsBoard
+                  ? (
+                      (
+                        caseWhiteboards[
+                          caseIndex
+                        ] || []
+                      )[questionIndex] || ""
+                    )
+                  : undefined,
+                needsBoard
+                  ? Boolean(
+                      (
+                        (
+                          caseWhiteboardHasInk[
+                            caseIndex
+                          ] || []
+                        )[questionIndex]
+                      )
+                    )
+                  : false,
+                `Whiteboard work for ${caseData.title}, question ${questionIndex + 1}`
+              );
+
+              section.appendChild(item);
+            }
+          );
+
+          caseResponseSummary.appendChild(
+            section
+          );
+        }
+      );
+
+      masteryResponses.forEach(
+        (saved, index) => {
+          const question =
+            masteryQuestions[index];
+
+          const section =
+            document.createElement(
+              "section"
+            );
+
+          section.className =
+            "responseQuestion";
+
+          addTextElement(
+            section,
+            "h3",
+            `${index + 1}. ${question.prompt}`
+          );
+
+          addTextElement(
+            section,
+            "div",
+            `Student response: ${saved.response || ""}`,
+            "responseLabel"
+          );
+
+          addTextElement(
+            section,
+            "div",
+            `Checks used: ${saved.checksUsed || 0}`
+          );
+
+          const needsBoard =
+            questionNeedsWhiteboard(
+              question,
+              "mastery",
+              index
+            );
+
+          appendWorkAndWhiteboard(
+            section,
+            saved.work || "",
+            needsBoard
+              ? saved.whiteboard || ""
+              : undefined,
+            needsBoard
+              ? Boolean(
+                  saved.whiteboardHasInk
+                )
+              : false,
+            `Whiteboard work for final detective question ${index + 1}`
+          );
+
+          masteryResponseSummary.appendChild(
+            section
+          );
+        }
+      );
+    }
+
     function showCertificate() {
       masterySection.classList.add("hidden");
       certificateSection.classList.remove("hidden");
@@ -1530,8 +2701,8 @@
       document.getElementById("certificateName")
         .textContent = studentName;
 
-      document.getElementById("certificateDate")
-        .textContent = now.toLocaleDateString(
+      const completionDateText =
+        now.toLocaleDateString(
           "en-US",
           {
             year: "numeric",
@@ -1540,9 +2711,42 @@
           }
         );
 
-      document.getElementById("verificationCode")
-        .textContent =
-          createVerificationCode(studentName, now);
+      if (!activityEndTime) {
+        activityEndTime = Date.now();
+      }
+
+      const elapsedTimeText =
+        formatElapsedTime(
+          activityEndTime -
+          (
+            activityStartTime ||
+            activityEndTime
+          )
+        );
+
+      const code =
+        createVerificationCode(
+          studentName,
+          now
+        );
+
+      document.getElementById(
+        "certificateDate"
+      ).textContent =
+        completionDateText;
+
+      certificateElapsedTime.textContent =
+        elapsedTimeText;
+
+      document.getElementById(
+        "verificationCode"
+      ).textContent = code;
+
+      buildResponseRecord(
+        completionDateText,
+        elapsedTimeText,
+        code
+      );
 
       document.getElementById("trail-4")
         .classList.remove("active");
@@ -1605,6 +2809,48 @@
         if (event.key === "Enter") {
           startActivity();
         }
+      }
+    );
+
+    caseContainer.addEventListener(
+      "input",
+      (event) => {
+        if (
+          !event.target.classList.contains(
+            "workBox"
+          )
+        ) {
+          return;
+        }
+
+        const wrapper =
+          event.target.closest(
+            ".question"
+          );
+
+        if (!wrapper) {
+          return;
+        }
+
+        const index =
+          Number(
+            wrapper.dataset.questionIndex
+          );
+
+        caseWork[
+          currentCaseIndex
+        ] =
+          caseWork[
+            currentCaseIndex
+          ] ||
+          cases[
+            currentCaseIndex
+          ].questions.map(() => "");
+
+        caseWork[
+          currentCaseIndex
+        ][index] =
+          event.target.value;
       }
     );
 
